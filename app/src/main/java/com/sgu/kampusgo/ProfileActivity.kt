@@ -25,21 +25,24 @@ class ProfileActivity: ComponentActivity() {
         val activity = this
 // Read the extra named "name". If screen 1 sent nothing, use Guest. No !!.
         val name = intent.getStringExtra("name") ?: "Guest"
+        val npm = intent.getStringExtra("npm")?.ifBlank {"-"} ?: "-"
+
         setContent {
             KampusGoTheme {
                 Column(modifier = Modifier.padding(24.dp)) {
 // Show the name that traveled inside the Intent.
                     Text(text = "Hello, $name")
+                    Text(text = "NPM: $npm")
                     Button(onClick = {
 // Implicit Intent: do not name an Activity. Ask the phone for a dialer.
-                        val dial = Intent(Intent.ACTION_DIAL, Uri.parse("tel:0211234567"))
+                        val web = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.sgu.ac.id"))
                         try {
-                            activity.startActivity(dial)
+                            activity.startActivity(web)
                         } catch (e: ActivityNotFoundException) {
-                            Toast.makeText(activity, "No dialer on this device", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(activity, "No browser on this device", Toast.LENGTH_SHORT).show()
                         }
                     }) {
-                        Text("Call campus")
+                        Text("Open SGU Website")
                     }
                 }
             }
